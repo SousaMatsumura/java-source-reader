@@ -64,4 +64,8 @@ public abstract class NormalJavaMethod{
    public Set<String> getExceptions() {
       return exceptions;
    }
+
+   public Set<String> getAnnotationModifiers() {
+      return annotationModifiers;
+   }
 }

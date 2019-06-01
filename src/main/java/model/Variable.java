@@ -1,5 +1,7 @@
 package model;
 
+import resource.Cons;
+
 import java.util.Set;
 
 public class Variable {
@@ -54,8 +56,8 @@ public class Variable {
 
    public String getID(){
       final StringBuilder result = new StringBuilder(dataKind);
-      result.append(' ').append(name);
-      if(value != null) result.append(' ').append(value);
+      result.append(Cons.SPACE).append(name);
+      if(value != null) result.append(Cons.EQUAL).append(value);
       return result.toString();
    }
 

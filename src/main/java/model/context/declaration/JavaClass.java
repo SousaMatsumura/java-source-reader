@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static resource.Cons.*;
-import static resource.Cons.LF;
 
 public class JavaClass extends NormalJavaDeclaration implements JavaDeclaration {
    private String extend;
@@ -36,7 +35,7 @@ public class JavaClass extends NormalJavaDeclaration implements JavaDeclaration 
          for (Integer mod : getModifiers()) result.append(Modifier.getValue(mod)).append(SPACE);
       }
       result.append(DeclarationType.CLASS.toString()).append(SPACE).append(getName());
-      if(!extend.equals("")) result.append(EXTEND).append(SPACE).append(extend);
+      if(!extend.equals("")) result.append(SPACE).append(EXTEND).append(SPACE).append(extend);
       if(implementations != null && implementations.size() > 0) {
          result.append(SPACE).append(IMPLEMENTS);
          Iterator<String> iterator = implementations.iterator();
@@ -47,7 +46,6 @@ public class JavaClass extends NormalJavaDeclaration implements JavaDeclaration 
 
       if(getInnerDeclarations() != null && getInnerDeclarations().size() > 0){
          for(JavaDeclaration jd : getInnerDeclarations()){
-            for (int count = 0; count < depth; count++) result.append(INDENT);
             if(jd instanceof JavaClass){
                JavaClass jc = (JavaClass) jd;
                result.append(jd.toStringByDepth(depth+1));

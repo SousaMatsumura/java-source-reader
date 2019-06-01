@@ -196,17 +196,13 @@ public class JavaDeclarationVisitor extends Java8BaseVisitor<Set<JavaDeclaration
 
       if(ctx != null){
          int i = 0, s = ctx.getChildCount();
-         while(ctx.getChild(i) instanceof Java8Parser.ClassModifierContext){
+         while(ctx.getChild(i) instanceof Java8Parser.ConstructorModifierContext){
             if(ctx.getChild(i).getChild(0) instanceof Java8Parser.AnnotationContext)
                annotationModifiers.add(ctx.getChild(i).getText());
             else modifiers.add(Modifier.getIndex(ctx.getChild(i).getText()));
             i++;
          }
-         if(ctx.getChild(i).getText().equals(DeclarationType.CLASS.toString())){
-            name = ctx.getChild(i+1).getText();
-            i+=2;
-         }
-
+         name = ctx.getChild(i).getChild(0).getChild(0).getText();
          if(ctx.constructorDeclarator().formalParameterList() != null) {
             if (ctx.constructorDeclarator().formalParameterList().formalParameters() != null) {
                for (Java8Parser.FormalParameterContext param : ctx.constructorDeclarator().formalParameterList().formalParameters().formalParameter()) {
