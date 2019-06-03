@@ -1,14 +1,15 @@
-package parser;
+package parser.visit;
 
 import model.*;
 import model.context.JavaDeclaration;
 import org.apache.commons.lang3.StringUtils;
+import parser.Java8Parser;
 
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class JavaFileVisitor extends Java8BaseVisitor<JavaFile>{
+public class JavaFileVisitor extends Java8BaseVisitor<JavaFile> {
    private String path;
    private final Set<String> imports = new HashSet<>();
    private final Set<JavaDeclaration> declarations = new HashSet<>();

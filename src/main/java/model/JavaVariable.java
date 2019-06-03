@@ -4,17 +4,21 @@ import resource.Cons;
 
 import java.util.Set;
 
-public class Variable {
+import static resource.Cons.SPACE;
+
+public class JavaVariable {
    private String name;
    private String dataKind;
    private String value;
    private Set<Integer> modifiers;
+   private Set<JavaAnnotationModifier> annotationModifiers;
 
-   private Variable(String name, String dataKind, String value, Set<Integer> modifiers){
+   private JavaVariable(String name, String dataKind, String value, Set<Integer> modifiers, Set<JavaAnnotationModifier> annotationModifiers){
       this.name = name;
       this.dataKind = dataKind;
       this.value = value;
       this.modifiers = modifiers;
+      this.annotationModifiers = annotationModifiers;
    }
 
    public static class Builder{
@@ -22,6 +26,7 @@ public class Variable {
       private String dataKind;
       private String value;
       private Set<Integer> modifiers;
+      private Set<JavaAnnotationModifier> annotationModifiers;
 
       public Builder(String dataKind, String name){
          this.name = name;
@@ -31,12 +36,16 @@ public class Variable {
          this.value = value;
          return this;
       }
-      public Builder modifiers(Set modifiers){
+      public Builder modifiers(Set<Integer> modifiers){
          this.modifiers = modifiers;
          return this;
       }
-      public Variable build(){
-         return new Variable(name, dataKind, value, modifiers);
+      public Builder annotationModifiers(Set<JavaAnnotationModifier> annotationModifiers){
+         this.annotationModifiers = annotationModifiers;
+         return this;
+      }
+      public JavaVariable build(){
+         return new JavaVariable(name, dataKind, value, modifiers, annotationModifiers);
       }
    }
 
@@ -45,8 +54,8 @@ public class Variable {
       if(obj == null) return false;
       if(obj == this) return true;
       if(obj.getClass() != this.getClass()) return false;
-      Variable var = (Variable) obj;
-      return !getID().equals("") && getID().equals(var.getID());
+      JavaVariable var = (JavaVariable) obj;
+      return !getID().isEmpty() && getID().equals(var.getID());
    }
 
    @Override
@@ -56,7 +65,7 @@ public class Variable {
 
    public String getID(){
       final StringBuilder result = new StringBuilder(dataKind);
-      result.append(Cons.SPACE).append(name);
+      result.append(SPACE).append(name);
       if(value != null) result.append(Cons.EQUAL).append(value);
       return result.toString();
    }
@@ -80,15 +89,17 @@ public class Variable {
    @Override
    public String toString() {
       StringBuilder result = new StringBuilder();
-      result.append("\n~~~~~ Variable Datails ~~~~~\n");
 
-      result.append("   Modifiers:\n");
-      if (modifiers != null){
-         for (Integer i : modifiers) result.append("      ").append(Modifier.getValue(i)).append("\n");
+      if (annotationModifiers != null && annotationModifiers.size()>0){
+         for (JavaAnnotationModifier jam : annotationModifiers)
+            result.append(jam.toString());
+         result.append(SPACE);
       }
-      result.append("   Data Type:\n      ").append(dataKind).append("\n");
-      result.append("   Variable Name:\n").append("      ").append(name).append("\n");
-      result.append("   Value:\n      ").append(value).append("\n");
+      if (modifiers != null && modifiers.size()>0){
+         for (Integer i : modifiers) result.append(JavaModifier.getValue(i));
+         result.append(SPACE);
+      }
+      result.append(dataKind).append(SPACE).append(name);
       return result.toString();
    }
 

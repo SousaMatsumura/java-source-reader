@@ -26,8 +26,11 @@ public class JavaProject {
    @Override
    public String toString() {
       StringBuilder result = new StringBuilder();
-      result.append(JP).append(COLON).append(SPACE).append(path).append(LF);
-      for(JavaFile jf : javaFiles) result.append(jf.toString());
+      result.append(JP).append(COLON).append(SPACE).append(path).append(SEMI_COLON).append(LF).append(LF);
+      for(JavaFile jf : javaFiles) {
+         result.append("-------------------------------------------------").append(LF);
+         result.append(jf.toString());
+      }
       return result.toString();
    }
 }

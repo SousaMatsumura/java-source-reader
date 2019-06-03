@@ -1,19 +1,22 @@
 package model.context.method;
 
-import model.Variable;
+import model.JavaAnnotationModifier;
+import model.JavaVariable;
 import model.context.JavaDeclaration;
 
 import java.util.Set;
 
+import static resource.Cons.*;
+
 public abstract class NormalJavaMethod{
    private Set<Integer> modifiers;
-   private Set<String> annotationModifiers;
+   private Set<JavaAnnotationModifier> annotationModifiers;
    private String name;
    private Set<JavaDeclaration> innerDeclarations;
-   private Set<Variable> parameters;
+   private Set<JavaVariable> parameters;
    private Set<String> exceptions;
 
-   NormalJavaMethod(Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations, Set<Variable> parameters, Set<String> exceptions, Set<String> annotationModifiers) {
+   NormalJavaMethod(Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations, Set<JavaVariable> parameters, Set<String> exceptions, Set<JavaAnnotationModifier> annotationModifiers) {
       this.modifiers = modifiers;
       this.name = name;
       this.innerDeclarations = innerDeclarations;
@@ -39,10 +42,10 @@ public abstract class NormalJavaMethod{
    private String getMethodSignature(){
       if(name==null) return null;
       final StringBuilder result = new StringBuilder(name);
-      result.append('(');
+      result.append(OPEN_PARENTHESES);
       if(parameters != null && parameters.size()>0)
-         for(Variable p : parameters) result.append(p.getDataKind()).append(',');
-      return result.deleteCharAt(result.length()-1).append(')').toString();
+         for(JavaVariable p : parameters) result.append(p.getDataKind()).append(COMMA);
+      return result.deleteCharAt(result.length()-1).append(CLOSE_PARENTHESES).toString();
    }
 
    public Set<Integer> getModifiers() {
@@ -53,7 +56,7 @@ public abstract class NormalJavaMethod{
       return name;
    }
 
-   public Set<Variable> getParameters() {
+   public Set<JavaVariable> getParameters() {
       return parameters;
    }
 
@@ -65,7 +68,7 @@ public abstract class NormalJavaMethod{
       return exceptions;
    }
 
-   public Set<String> getAnnotationModifiers() {
+   public Set<JavaAnnotationModifier> getAnnotationModifiers() {
       return annotationModifiers;
    }
 }

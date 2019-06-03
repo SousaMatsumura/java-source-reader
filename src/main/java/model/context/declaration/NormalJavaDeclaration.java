@@ -1,17 +1,17 @@
 package model.context.declaration;
 
-import model.Modifier;
+import model.JavaAnnotationModifier;
 import model.context.JavaDeclaration;
 
 import java.util.Set;
 
 public abstract class NormalJavaDeclaration{
-   private Set<String> annotationModifiers;
+   private Set<JavaAnnotationModifier> annotationModifiers;
    private Set<Integer> modifiers;
    private String name;
    private Set<JavaDeclaration> innerDeclarations;
 
-   public NormalJavaDeclaration(Set<String> annotationModifiers, Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations) {
+   public NormalJavaDeclaration(Set<JavaAnnotationModifier> annotationModifiers, Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations) {
       this.annotationModifiers = annotationModifiers;
       this.modifiers = modifiers;
       this.name = name;
@@ -44,7 +44,7 @@ public abstract class NormalJavaDeclaration{
       return innerDeclarations;
    }
 
-   public Set<String> getAnnotationModifiers() {
+   public Set<JavaAnnotationModifier> getAnnotationModifiers() {
       return annotationModifiers;
    }
 }

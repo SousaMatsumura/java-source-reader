@@ -1,6 +1,7 @@
-package parser;
+package parser.visit;
 // Generated from C:/Users/Gabriel/Desktop/autotest/grammar\Java8.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
+import parser.Java8Parser;
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced

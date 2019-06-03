@@ -1,6 +1,8 @@
-package parser;
+package parser.visit;
 // Generated from Java8.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import parser.Java8Parser;
+import parser.visit.Java8Visitor;
 
 /**
  * This class provides an empty implementation of {@link Java8Visitor},

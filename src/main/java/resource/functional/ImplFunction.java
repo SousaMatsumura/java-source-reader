@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import parser.Java8Lexer;
 import parser.Java8Parser;
-import parser.JavaFileVisitor;
+import parser.visit.JavaFileVisitor;
 
 import java.io.IOException;
 import java.nio.file.Files;

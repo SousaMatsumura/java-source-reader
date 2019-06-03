@@ -2,11 +2,11 @@ package model;
 
 import org.apache.commons.lang3.StringUtils;
 
-public enum Modifier {
+public enum JavaModifier {
    PUBLIC(1), PRIVATE(2), PROTECTED(3), STATIC(4), FINAL(5), ABSTRACT(6), NATIVE(7), SYNCHRONIZED(8), TRANSIENT(9), VOLATILE(10), STRICTFP(11), DEFAULT(12);
    private int value;
    public static final String[] STRING_VALUES = stringValues();
-   Modifier(int value){this.value = value;}
+   JavaModifier(int value){this.value = value;}
 
    public static int getIndex(String value){
       switch(value){
@@ -75,9 +75,9 @@ public enum Modifier {
    }
 
    private static String[] stringValues(){
-      String[] result = new String[Modifier.values().length];
-      for(int i = 0; i< Modifier.values().length; i++){
-         result[i] = Modifier.values()[i].toString();
+      String[] result = new String[JavaModifier.values().length];
+      for(int i = 0; i< JavaModifier.values().length; i++){
+         result[i] = JavaModifier.values()[i].toString();
       }
       return result;
    }

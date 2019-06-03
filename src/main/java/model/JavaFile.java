@@ -1,9 +1,11 @@
 package model;
 
 import model.context.JavaDeclaration;
-import model.context.declaration.*;
-import resource.Cons;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Set;
 
 import static resource.Cons.*;
@@ -87,46 +89,22 @@ public class JavaFile {
 
    @Override
    public String toString() {
-      return toStringByDepth(1);
-   }
-
-   private String toStringByDepth(int depth){
       StringBuilder result = new StringBuilder();
-      for(int count = 0; count < depth; count++) result.append(INDENT);
       result.append(JF).append(COLON).append(SPACE).append(path).append(SEMI_COLON).append(LF).append(LF);
       if(path != null) {
-         for(int count = 0; count < depth; count++) result.append(INDENT);
          result.append(PACK).append(SPACE).append(pack).append(SEMI_COLON).append(LF).append(LF);
       }
       if(imports != null && imports.size()>0) {
          for (String imp : imports) {
-            for (int count = 0; count < depth; count++) result.append(INDENT);
             result.append(IMPORT).append(SPACE).append(imp).append(LF);
          }
          result.append(LF);
       }
       if(declarations != null && declarations.size() > 0){
          for(JavaDeclaration jd : declarations){
-            if(jd instanceof JavaClass){
-               JavaClass jc = (JavaClass) jd;
-               result.append(jd.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaEnum){
-               JavaEnum je = (JavaEnum) jd;
-               result.append(je.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaInterface){
-               JavaInterface ji = (JavaInterface) jd;
-               result.append(ji.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaAnnotation){
-               JavaAnnotation ja = (JavaAnnotation) jd;
-               result.append(ja.toStringByDepth(depth+1));
-            }
-            result.append(LF).append(LF);
+            result.append(jd.toStringByDepth(0)).append(LF);
          }
       }
-      result.append("-------------------------------------------------");
       return result.toString();
    }
 }

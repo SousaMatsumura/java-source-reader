@@ -1,10 +1,8 @@
 package model.context.declaration;
 
-import model.Modifier;
+import model.JavaAnnotationModifier;
+import model.JavaModifier;
 import model.context.JavaDeclaration;
-import model.context.method.JavaAnnotationMethod;
-import model.context.method.JavaConstructor;
-import model.context.method.JavaMethod;
 import resource.DeclarationType;
 
 import java.util.Iterator;
@@ -15,7 +13,7 @@ import static resource.Cons.*;
 public class JavaClass extends NormalJavaDeclaration implements JavaDeclaration {
    private String extend;
    private Set<String> implementations;
-   private JavaClass(Set<String> annotationModifiers, Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations, String extend, Set<String> implementations) {
+   private JavaClass(Set<JavaAnnotationModifier> annotationModifiers, Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations, String extend, Set<String> implementations) {
       super(annotationModifiers, modifiers, name, innerDeclarations);
       this.extend = extend;
       this.implementations = implementations;
@@ -25,14 +23,14 @@ public class JavaClass extends NormalJavaDeclaration implements JavaDeclaration 
    public String toStringByDepth(int depth) {
       StringBuilder result = new StringBuilder();
       if(getAnnotationModifiers()!=null && getAnnotationModifiers().size()>0) {
-         for (String amd : getAnnotationModifiers()) {
+         for (JavaAnnotationModifier amd : getAnnotationModifiers()) {
             for (int count = 0; count < depth; count++) result.append(INDENT);
-            result.append(amd).append(LF);
+            result.append(amd.toString()).append(LF);
          }
       }
+      for (int count = 0; count < depth; count++) result.append(INDENT);
       if(getModifiers() != null && getModifiers().size()>0){
-         for (int count = 0; count < depth; count++) result.append(INDENT);
-         for (Integer mod : getModifiers()) result.append(Modifier.getValue(mod)).append(SPACE);
+         for (Integer mod : getModifiers()) result.append(JavaModifier.getValue(mod)).append(SPACE);
       }
       result.append(DeclarationType.CLASS.toString()).append(SPACE).append(getName());
       if(!extend.equals("")) result.append(SPACE).append(EXTEND).append(SPACE).append(extend);
@@ -42,48 +40,24 @@ public class JavaClass extends NormalJavaDeclaration implements JavaDeclaration 
          result.append(SPACE).append(iterator.next());
          while (iterator.hasNext()) result.append(COMMA).append(SPACE).append(iterator.next());
       }
-      result.append(OPEN_BRACE).append(LF);
+      result.append(OPEN_BRACE);
 
       if(getInnerDeclarations() != null && getInnerDeclarations().size() > 0){
-         for(JavaDeclaration jd : getInnerDeclarations()){
-            if(jd instanceof JavaClass){
-               JavaClass jc = (JavaClass) jd;
-               result.append(jd.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaEnum){
-               JavaEnum je = (JavaEnum) jd;
-               result.append(je.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaInterface){
-               JavaInterface ji = (JavaInterface) jd;
-               result.append(ji.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaAnnotation){
-               JavaAnnotation ja = (JavaAnnotation) jd;
-               result.append(ja.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaConstructor){
-               JavaConstructor jc = (JavaConstructor) jd;
-               result.append(jc.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaMethod){
-               JavaMethod jm = (JavaMethod) jd;
-               result.append(jm.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaAnnotationMethod){
-               JavaAnnotationMethod jam = (JavaAnnotationMethod) jd;
-               result.append(jam.toStringByDepth(depth+1));
-            }
-            result.append(LF);
-         }
+         result.append(LF);
+         for(JavaDeclaration jd : getInnerDeclarations()) result.append(jd.toStringByDepth(depth+1)).append(LF);
+         for (int count = 0; count < depth; count++) result.append(INDENT);
       }
-      for (int count = 0; count < depth; count++) result.append(INDENT);
-      result.append(CLOSE_BRACE);
+      result.append(CLOSE_BRACE).append(LF);
       return result.toString();
    }
 
+   @Override
+   public String toString() {
+      return toStringByDepth(0);
+   }
+
    public static class Builder{
-      private Set<String> annotationModifiers;
+      private Set<JavaAnnotationModifier> annotationModifiers;
       private Set<Integer> modifiers;
       private String name;
       private Set<JavaDeclaration> innerDeclarations;
@@ -93,7 +67,7 @@ public class JavaClass extends NormalJavaDeclaration implements JavaDeclaration 
       public Builder(String name){
          this.name = name;
       }
-      public Builder annotationModifiers(Set<String> annotationModifiers){
+      public Builder annotationModifiers(Set<JavaAnnotationModifier> annotationModifiers){
          this.annotationModifiers = annotationModifiers;
          return this;
       }

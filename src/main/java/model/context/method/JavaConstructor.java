@@ -1,12 +1,9 @@
 package model.context.method;
 
-import model.Modifier;
-import model.Variable;
+import model.JavaAnnotationModifier;
+import model.JavaVariable;
+import model.JavaModifier;
 import model.context.JavaDeclaration;
-import model.context.declaration.JavaAnnotation;
-import model.context.declaration.JavaClass;
-import model.context.declaration.JavaEnum;
-import model.context.declaration.JavaInterface;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -16,37 +13,33 @@ import static resource.Cons.CLOSE_BRACE;
 
 public class JavaConstructor extends NormalJavaMethod implements JavaDeclaration {
 
-   private JavaConstructor(Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations, Set<Variable> parameters, Set<String> exceptions, Set<String> annotationModifiers) {
+   private JavaConstructor(Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations, Set<JavaVariable> parameters, Set<String> exceptions, Set<JavaAnnotationModifier> annotationModifiers) {
       super(modifiers, name, innerDeclarations, parameters, exceptions, annotationModifiers);
+   }
+
+   @Override
+   public String toString() {
+      return toStringByDepth(0);
    }
 
    @Override
    public String toStringByDepth(int depth) {
       StringBuilder result = new StringBuilder();
       if(getAnnotationModifiers()!=null && getAnnotationModifiers().size()>0) {
-         for (String amd : getAnnotationModifiers()) {
+         for (JavaAnnotationModifier amd : getAnnotationModifiers()) {
             for (int count = 0; count < depth; count++) result.append(INDENT);
-            result.append(amd).append(LF);
+            result.append(amd.toString()).append(LF);
          }
       }
+      for (int count = 0; count < depth; count++) result.append(INDENT);
       if(getModifiers() != null && getModifiers().size()>0){
-         for (int count = 0; count < depth; count++) result.append(INDENT);
-         for (Integer mod : getModifiers()) result.append(Modifier.getValue(mod)).append(SPACE);
+         for (Integer mod : getModifiers()) result.append(JavaModifier.getValue(mod)).append(SPACE);
       }
       result.append(getName()).append(OPEN_PARENTHESES);
       if(getParameters() != null && getParameters().size() > 0) {
-         Iterator<Variable> iterator = getParameters().iterator();
-         Variable param = iterator.next();
-         if(param.getModifiers() != null && param.getModifiers().size() > 0)
-            for (Integer mod : param.getModifiers()) result.append(Modifier.getValue(mod)).append(SPACE);
-         result.append(param.getID());
-         while (iterator.hasNext()) {
-            result.append(COMMA).append(SPACE);
-            param = iterator.next();
-            if (param.getModifiers() != null && param.getModifiers().size() > 0)
-               for (Integer mod : param.getModifiers()) result.append(Modifier.getValue(mod)).append(SPACE);
-            result.append(param.getID());
-         }
+         Iterator<JavaVariable> iterator = getParameters().iterator();
+         result.append(iterator.next());
+         while(iterator.hasNext()) result.append(COMMA).append(SPACE).append(iterator.next());
       }
       result.append(CLOSE_PARENTHESES);
       if(getExceptions() != null && getExceptions().size()>0){
@@ -56,53 +49,26 @@ public class JavaConstructor extends NormalJavaMethod implements JavaDeclaration
             result.append(COMMA).append(SPACE).append(iterator.next());
          }
       }
-      result.append(OPEN_BRACE).append(LF);
+      result.append(OPEN_BRACE);
+
+
 
       if(getInnerDeclarations() != null && getInnerDeclarations().size() > 0){
-         for(JavaDeclaration jd : getInnerDeclarations()){
-            if(jd instanceof JavaClass){
-               JavaClass jc = (JavaClass) jd;
-               result.append(jd.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaEnum){
-               JavaEnum je = (JavaEnum) jd;
-               result.append(je.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaInterface){
-               JavaInterface ji = (JavaInterface) jd;
-               result.append(ji.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaAnnotation){
-               JavaAnnotation ja = (JavaAnnotation) jd;
-               result.append(ja.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaConstructor){
-               JavaConstructor jc = (JavaConstructor) jd;
-               result.append(jc.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaMethod){
-               JavaMethod jm = (JavaMethod) jd;
-               result.append(jm.toStringByDepth(depth+1));
-            }
-            else if(jd instanceof JavaAnnotationMethod){
-               JavaAnnotationMethod jam = (JavaAnnotationMethod) jd;
-               result.append(jam.toStringByDepth(depth+1));
-            }
-            result.append(LF);
-         }
+         result.append(LF);
+         for(JavaDeclaration jd : getInnerDeclarations()) result.append(jd.toStringByDepth(depth+1)).append(LF);
+         for (int count = 0; count < depth; count++) result.append(INDENT);
       }
-      for (int count = 0; count < depth; count++) result.append(INDENT);
-      result.append(CLOSE_BRACE);
+      result.append(CLOSE_BRACE).append(LF);
       return result.toString();
 
    }
 
    public static class Builder{
-      private Set<String> annotationModifiers;
+      private Set<JavaAnnotationModifier> annotationModifiers;
       private Set<Integer> modifiers;
       private String name;
       private Set<JavaDeclaration> innerDeclarations;
-      private Set<Variable> parameters;
+      private Set<JavaVariable> parameters;
       private Set<String> exceptions;
 
       public Builder(String name){
@@ -112,7 +78,7 @@ public class JavaConstructor extends NormalJavaMethod implements JavaDeclaration
          this.modifiers = modifiers;
          return this;
       }
-      public Builder annotationModifiers(Set<String> annotationModifiers){
+      public Builder annotationModifiers(Set<JavaAnnotationModifier> annotationModifiers){
          this.annotationModifiers = annotationModifiers;
          return this;
       }
@@ -120,8 +86,8 @@ public class JavaConstructor extends NormalJavaMethod implements JavaDeclaration
          this.innerDeclarations = innerDeclarations;
          return this;
       }
-      public Builder parameters(Set<Variable> paraters){
-         this.parameters = paraters;
+      public Builder parameters(Set<JavaVariable> parameters){
+         this.parameters = parameters;
          return this;
       }
       public Builder exceptions(Set<String> exceptions){

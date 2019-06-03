@@ -1,16 +1,19 @@
 package model.context.method;
 
+import model.JavaAnnotationModifier;
 import model.context.JavaDeclaration;
 
 import java.util.Set;
 
+import static resource.Cons.*;
+
 public class JavaAnnotationMethod implements JavaDeclaration {
-   private Set<String> annotationModifiers;
+   private Set<JavaAnnotationModifier> annotationModifiers;
    private String name;
-   private Object defaultValue;
+   private String defaultValue;
    private String returns;
 
-   private JavaAnnotationMethod(Set<String> annotationModifiers, String name, Object defaultValue, String returns) {
+   private JavaAnnotationMethod(Set<JavaAnnotationModifier> annotationModifiers, String name, String defaultValue, String returns) {
       this.annotationModifiers = annotationModifiers;
       this.name = name;
       this.defaultValue = defaultValue;
@@ -38,28 +41,42 @@ public class JavaAnnotationMethod implements JavaDeclaration {
 
    @Override
    public String toStringByDepth(int depth) {
-      return null;
+      StringBuilder result = new StringBuilder();
+      if(annotationModifiers!=null && annotationModifiers.size()>0) {
+         for (JavaAnnotationModifier amd : annotationModifiers) {
+            for (int count = 0; count < depth; count++) result.append(INDENT);
+            result.append(amd.toString()).append(LF);
+         }
+      }
+      for (int count = 0; count < depth; count++) result.append(INDENT);
+
+      result.append(returns).append(SPACE).append(getName()).append(OPEN_PARENTHESES).append(CLOSE_PARENTHESES);
+      if(defaultValue != null && !defaultValue.equals("")) result.append(SPACE).append(DEFAULT).append(SPACE).append(defaultValue);
+      result.append(SEMI_COLON).append(LF);
+      return result.toString();
+   }
+
+   @Override
+   public String toString() {
+      return toStringByDepth(0);
    }
 
    public static class Builder{
-      private Set<String> annotationModifiers;
+      private Set<JavaAnnotationModifier> annotationModifiers;
       private String name;
-      private Object defaultValue;
+      private String defaultValue;
       private String returns;
 
-      public Builder(String name){
+      public Builder(String name, String returns){
          this.name = name;
+         this.returns = returns;
       }
-      public Builder annotationModifiers(Set<String> annotationModifiers){
+      public Builder annotationModifiers(Set<JavaAnnotationModifier> annotationModifiers){
          this.annotationModifiers = annotationModifiers;
          return this;
       }
-      public Builder defaultValue(Object defaultValue){
+      public Builder defaultValue(String defaultValue){
          this.defaultValue = defaultValue;
-         return this;
-      }
-      public Builder returns(String returns){
-         this.returns = returns;
          return this;
       }
       public JavaAnnotationMethod build(){
