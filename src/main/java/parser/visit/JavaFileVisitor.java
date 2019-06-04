@@ -29,7 +29,8 @@ public class JavaFileVisitor extends Java8BaseVisitor<JavaFile> {
       if(ctx != null) {
          if (ctx.getChild(0) instanceof Java8Parser.SingleStaticImportDeclarationContext) {
             StringBuilder sb = new StringBuilder("static ");
-            for(int i = 2, l=ctx.getChild(0).getChildCount(); i<l; i++) sb.append(ctx.getChild(0).getChild(i).getText());
+            for(int i = 2, l=ctx.getChild(0).getChildCount(); i<l; i++)
+               sb.append(ctx.getChild(0).getChild(i).getText());
             imports.add(sb.toString());
          } else imports.add(StringUtils.remove(ctx.getText(), Cons.IMPORT));
       }

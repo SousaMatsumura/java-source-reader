@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static resource.Cons.COMMA;
+import static resource.Cons.EMPTY;
 
 public class JavaInterfaceVisitor extends Java8BaseVisitor<JavaInterface> {
 
@@ -22,7 +23,7 @@ public class JavaInterfaceVisitor extends Java8BaseVisitor<JavaInterface> {
       final Set<Integer> modifiers = new HashSet<>();
       final Set<String> extents = new HashSet<>();
 
-      String name = "";
+      String name = EMPTY;
       if(ctx != null){
          int i = 0;
          while(ctx.getChild(i) instanceof Java8Parser.InterfaceModifierContext){
@@ -36,7 +37,8 @@ public class JavaInterfaceVisitor extends Java8BaseVisitor<JavaInterface> {
             i+=2;
          }
          if (ctx.getChild(i) instanceof Java8Parser.ExtendsInterfacesContext){
-            Java8Parser.InterfaceTypeListContext interfaceList = (Java8Parser.InterfaceTypeListContext) ctx.getChild(i).getChild(1);
+            Java8Parser.InterfaceTypeListContext interfaceList =
+                  (Java8Parser.InterfaceTypeListContext) ctx.getChild(i).getChild(1);
             for(int j = 0, l = interfaceList.getChildCount(); j<l; j++){
                if(interfaceList.getChild(j).getText().charAt(0) != COMMA){
                   extents.add(interfaceList.getChild(j).getText());
@@ -47,8 +49,8 @@ public class JavaInterfaceVisitor extends Java8BaseVisitor<JavaInterface> {
             Set<JavaDeclaration> temp = new JavaDeclarationVisitor().visit(ctx.interfaceBody());
             if(temp != null && temp.size()>0) declarations.addAll(temp);
          }
-         result = new JavaInterface.Builder(name).innerDeclarations(declarations)
-            .extents(extents).annotationModifiers(annotationModifiers).modifiers(modifiers).build();
+         result = new JavaInterface.Builder(name).innerDeclarations(declarations).extents(extents)
+                        .annotationModifiers(annotationModifiers).modifiers(modifiers).build();
       }
       return result;
    }

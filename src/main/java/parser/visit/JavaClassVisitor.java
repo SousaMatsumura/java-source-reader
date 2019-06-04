@@ -40,7 +40,8 @@ public class JavaClassVisitor extends Java8BaseVisitor<JavaClass> {
             i++;
          }
          if (ctx.getChild(i) instanceof Java8Parser.SuperinterfacesContext) {
-            Java8Parser.InterfaceTypeListContext interfaceList = (Java8Parser.InterfaceTypeListContext) ctx.getChild(i).getChild(1);
+            Java8Parser.InterfaceTypeListContext interfaceList =
+                  (Java8Parser.InterfaceTypeListContext) ctx.getChild(i).getChild(1);
             for (int j = 0, l = interfaceList.getChildCount(); j < l; j++) {
                if (interfaceList.getChild(j).getText().charAt(0) != COMMA) {
                   implementations.add(interfaceList.getChild(j).getText());

@@ -3,11 +3,9 @@ package parser.visit;
 import model.JavaAnnotationModifier;
 import model.JavaModifier;
 import model.JavaVariable;
-import model.declaration.JavaClass;
 import model.declaration.JavaDeclaration;
 import model.declaration.method.JavaConstructor;
 import parser.Java8Parser;
-import resource.DeclarationType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,62 +37,16 @@ public class JavaConstructorVisitor extends Java8BaseVisitor<JavaConstructor> {
          if(ctx.constructorDeclarator().formalParameterList() != null) {
             if (ctx.constructorDeclarator().formalParameterList().formalParameters() != null) {
                for (Java8Parser.FormalParameterContext param : ctx.constructorDeclarator().formalParameterList().formalParameters().formalParameter()) {
-                  String paramName = null, dataKind = null;
-                  Set<Integer> paramModifiers = new HashSet<>();
-                  Set<JavaAnnotationModifier> javaAnnotationModifiers = new HashSet<>();
-                  for(i = 0, s = param.getChildCount(); i<s; i++) {
-                     if (param.getChild(i) instanceof Java8Parser.UnannTypeContext) {
-                        dataKind = param.getChild(i).getText();
-                     }else if(param.getChild(i) instanceof Java8Parser.VariableModifierContext){
-                        if(param.getChild(i).getChild(0) instanceof Java8Parser.AnnotationContext)
-                           javaAnnotationModifiers.add(new JavaAnnotationModifier(param.getChild(i).getText()));
-                        else paramModifiers.add(JavaModifier.getIndex(param.getChild(i).getText()));
-                     }else if(param.getChild(i) instanceof Java8Parser.VariableDeclaratorIdContext){
-                        paramName = param.getChild(i).getText();
-                     }
-                  }
-                  parameters.add(new JavaVariable.Builder(dataKind, paramName)
-                     .annotationModifiers(javaAnnotationModifiers).modifiers(paramModifiers).build());
+                  parameters.add(new JavaParameterVisitor().visit(param));
                }
             }
 
             if (ctx.constructorDeclarator().formalParameterList().lastFormalParameter().formalParameter() != null) {
-               String paramName = null, dataKind = null;
-               Set<Integer> paramModifiers = new HashSet<>();
-               Set<JavaAnnotationModifier> javaAnnotationModifiers = new HashSet<>();
-               for(i = 0; i<ctx.constructorDeclarator().formalParameterList().lastFormalParameter().formalParameter().getChildCount(); i++) {
-                  if (ctx.constructorDeclarator().formalParameterList().lastFormalParameter().formalParameter().getChild(i) instanceof Java8Parser.UnannTypeContext) {
-                     dataKind = ctx.constructorDeclarator().formalParameterList().lastFormalParameter().formalParameter().getChild(i).getText();
-                  }else if(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().formalParameter().getChild(i) instanceof Java8Parser.VariableModifierContext){
-                     if(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().formalParameter().getChild(i).getChild(0) instanceof Java8Parser.AnnotationContext)
-                        javaAnnotationModifiers.add(new JavaAnnotationModifier(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().formalParameter().getChild(i).getText()));
-                     else paramModifiers.add(JavaModifier.getIndex(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().formalParameter().getChild(i).getText()));
-                  }else if(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().formalParameter().getChild(i) instanceof Java8Parser.VariableDeclaratorIdContext){
-                     paramName = ctx.constructorDeclarator().formalParameterList().lastFormalParameter().formalParameter().getChild(i).getText();
-                  }
-               }
-               parameters.add(new JavaVariable.Builder(dataKind, paramName).annotationModifiers(javaAnnotationModifiers)
-                                    .modifiers(paramModifiers).build());
+               parameters.add(new JavaParameterVisitor().visit(ctx.constructorDeclarator().formalParameterList()
+                  .lastFormalParameter().formalParameter()));
             }else{
-               String paramName = null;
-               StringBuilder dataKind = new StringBuilder(EMPTY);
-               Set<Integer> paramModifiers = new HashSet<>();
-               Set<JavaAnnotationModifier> javaAnnotationModifiers = new HashSet<>();
-               for(i = 0; i<ctx.constructorDeclarator().formalParameterList().lastFormalParameter().getChildCount(); i++) {
-                  if (ctx.constructorDeclarator().formalParameterList().lastFormalParameter().getChild(i) instanceof Java8Parser.UnannTypeContext) {
-                     dataKind.append(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().getChild(i).getText());
-                  }else if(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().getChild(i) instanceof Java8Parser.VariableModifierContext){
-                     if(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().getChild(i).getChild(0) instanceof Java8Parser.AnnotationContext)
-                        javaAnnotationModifiers.add(new JavaAnnotationModifier(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().getChild(i).getText()));
-                     else paramModifiers.add(JavaModifier.getIndex(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().getChild(i).getText()));
-                  }else if(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().getChild(i) instanceof Java8Parser.VariableDeclaratorIdContext){
-                     paramName = ctx.constructorDeclarator().formalParameterList().lastFormalParameter().getChild(i).getText();
-                  }else if(ctx.constructorDeclarator().formalParameterList().lastFormalParameter().getChild(i).getText().equals(ELLIPSIS)){
-                     dataKind.append(ELLIPSIS);
-                  }
-               }
-               parameters.add(new JavaVariable.Builder(dataKind.toString(), paramName).annotationModifiers(javaAnnotationModifiers)
-                                    .modifiers(paramModifiers).build());
+               parameters.add(new JavaParameterVisitor().visit(ctx.constructorDeclarator().formalParameterList()
+                  .lastFormalParameter()));
             }
          }
 

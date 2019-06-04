@@ -10,8 +10,7 @@ import resource.DeclarationType;
 import java.util.HashSet;
 import java.util.Set;
 
-import static resource.Cons.COMMA;
-import static resource.Cons.EMPTY;
+import static resource.Cons.*;
 
 public class JavaEnumVisitor extends Java8BaseVisitor<JavaEnum> {
 
@@ -38,7 +37,8 @@ public class JavaEnumVisitor extends Java8BaseVisitor<JavaEnum> {
             i+=2;
          }
          if (ctx.getChild(i) instanceof Java8Parser.SuperinterfacesContext){
-            Java8Parser.InterfaceTypeListContext interfaceList = (Java8Parser.InterfaceTypeListContext) ctx.getChild(i).getChild(1);
+            Java8Parser.InterfaceTypeListContext interfaceList =
+                  (Java8Parser.InterfaceTypeListContext) ctx.getChild(i).getChild(1);
             for(int j = 0, l = interfaceList.getChildCount(); j<l; j++){
                if(!interfaceList.getChild(j).getText().equals(Character.toString(COMMA))){
                   implementations.add(interfaceList.getChild(j).getText());
