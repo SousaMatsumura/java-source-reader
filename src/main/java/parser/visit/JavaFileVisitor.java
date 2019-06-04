@@ -1,9 +1,10 @@
 package parser.visit;
 
 import model.*;
-import model.context.JavaDeclaration;
+import model.declaration.JavaDeclaration;
 import org.apache.commons.lang3.StringUtils;
 import parser.Java8Parser;
+import resource.Cons;
 
 
 import java.util.HashSet;
@@ -30,7 +31,7 @@ public class JavaFileVisitor extends Java8BaseVisitor<JavaFile> {
             StringBuilder sb = new StringBuilder("static ");
             for(int i = 2, l=ctx.getChild(0).getChildCount(); i<l; i++) sb.append(ctx.getChild(0).getChild(i).getText());
             imports.add(sb.toString());
-         } else imports.add(StringUtils.remove(ctx.getText(), "import"));
+         } else imports.add(StringUtils.remove(ctx.getText(), Cons.IMPORT));
       }
       return new JavaFile.Builder(path).imports(imports).build();
    }
@@ -40,53 +41,6 @@ public class JavaFileVisitor extends Java8BaseVisitor<JavaFile> {
       if(ctx != null) declarations.addAll(new JavaDeclarationVisitor().visit(ctx));
       return new JavaFile.Builder(path).declarations(declarations).build();
    }
-
-   /*@Override
-   public Set<JavaFile> visitNormalClassDeclaration(Java8Parser.NormalClassDeclarationContext ctx) {
-      final Set<Class> result = new HashSet<>();
-      final Set<String> implement = new HashSet<>();
-      Integer kind = null;
-      String name = "", extend = "";
-      if(ctx != null){
-         int i = 0, s = ctx.getChildCount();
-         while(ctx.getChild(i) instanceof Java8Parser.ClassModifierContext){
-            modifiers.add(Modifiers.getIndex(ctx.getChild(i).getText()));
-            i++;
-         }
-         if(ClassKind.isClassKind(ctx.getChild(i).getText())){
-            kind = ClassKind.getIndex(ctx.getChild(i).getText());
-            name = ctx.getChild(i+1).getText();
-            i+=2;
-         }
-         if(ctx.getChild(i) instanceof Java8Parser.SuperclassContext){
-            extend = ctx.getChild(i).getChild(1).getText();
-            i++;
-         }
-         if (ctx.getChild(i) instanceof Java8Parser.SuperinterfacesContext){
-            Java8Parser.InterfaceTypeListContext interfaceList = (Java8Parser.InterfaceTypeListContext) ctx.getChild(i).getChild(1);
-            for(int j = 0, l = interfaceList.getChildCount(); j<l; j++){
-               if(!interfaceList.getChild(j).getText().equals(COMMA)){
-                  implement.add(interfaceList.getChild(j).getText());
-               }
-            }
-         }
-         if(ctx.classBody() != null){
-            Set<Method> temp = new MethodSignatureVisitor().visit(ctx.classBody());
-            if(temp != null && temp.size()>0) methods.addAll(temp);
-            temp = new ConstructorSignatureVisitor().visit(ctx.classBody());
-            if(temp != null && temp.size()>0) constructors.addAll(temp);
-         }
-         Class cla = new Class.Builder(path, name, kind).imports(imports).pack(pack).extend(extend).implement(implement)
-                           .methods(methods).constructors(constructors).build();
-         if(ctx.classBody() != null){
-            Set<Class> temp = new InnerClassVisitor(path).visit(ctx.classBody());
-            if(temp != null && temp.size()>0) innerClasses.addAll(temp);
-            cla = new Class.Builder(cla).innerClasses(innerClasses).build();
-         }
-         result.add(cla);
-      }
-      return result;
-   }*/
 
    @Override
    protected JavaFile aggregateResult(JavaFile aggregate, JavaFile nextResult) {
@@ -102,6 +56,5 @@ public class JavaFileVisitor extends Java8BaseVisitor<JavaFile> {
       if(nextResult.getPack() != null) result.pack(nextResult.getPack());
       return result.build();
    }
-
 
 }

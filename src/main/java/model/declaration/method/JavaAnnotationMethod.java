@@ -1,7 +1,7 @@
-package model.context.method;
+package model.declaration.method;
 
 import model.JavaAnnotationModifier;
-import model.context.JavaDeclaration;
+import model.declaration.JavaDeclaration;
 
 import java.util.Set;
 

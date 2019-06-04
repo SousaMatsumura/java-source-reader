@@ -1,21 +1,16 @@
-package model.context.declaration;
+package model.declaration;
 
 import model.JavaAnnotationModifier;
 import model.JavaModifier;
-import model.context.JavaDeclaration;
 import resource.DeclarationType;
 
-import java.util.Iterator;
 import java.util.Set;
 
 import static resource.Cons.*;
-import static resource.Cons.CLOSE_BRACE;
 
-public class JavaInterface extends NormalJavaDeclaration implements JavaDeclaration {
-   private Set<String> extents;
-   private JavaInterface(Set<JavaAnnotationModifier> annotationModifiers, Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations, Set<String> extents) {
+public class JavaAnnotation extends NormalJavaDeclaration implements JavaDeclaration {
+   private JavaAnnotation(Set<JavaAnnotationModifier> annotationModifiers, Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations) {
       super(annotationModifiers, modifiers, name, innerDeclarations);
-      this.extents = extents;
    }
 
    @Override
@@ -28,17 +23,10 @@ public class JavaInterface extends NormalJavaDeclaration implements JavaDeclarat
          }
       }
       for (int count = 0; count < depth; count++) result.append(INDENT);
-      if(getModifiers() != null && getModifiers().size()>0) {
+      if(getModifiers() != null && getModifiers().size()>0){
          for (Integer mod : getModifiers()) result.append(JavaModifier.getValue(mod)).append(SPACE);
       }
-
-      result.append(DeclarationType.INTERFACE.toString()).append(SPACE).append(getName());
-      if(extents != null && extents.size() > 0) {
-         result.append(SPACE).append(EXTEND);
-         Iterator<String> iterator = extents.iterator();
-         result.append(SPACE).append(iterator.next());
-         while (iterator.hasNext()) result.append(COMMA).append(SPACE).append(iterator.next());
-      }
+      result.append(DeclarationType.ANNOTATION.toString()).append(SPACE).append(getName());
       result.append(OPEN_BRACE);
 
       if(getInnerDeclarations() != null && getInnerDeclarations().size() > 0){
@@ -46,7 +34,6 @@ public class JavaInterface extends NormalJavaDeclaration implements JavaDeclarat
          for(JavaDeclaration jd : getInnerDeclarations()) result.append(jd.toStringByDepth(depth+1)).append(LF);
          for (int count = 0; count < depth; count++) result.append(INDENT);
       }
-
       result.append(CLOSE_BRACE).append(LF);
       return result.toString();
    }
@@ -61,7 +48,6 @@ public class JavaInterface extends NormalJavaDeclaration implements JavaDeclarat
       private Set<Integer> modifiers;
       private String name;
       private Set<JavaDeclaration> innerDeclarations;
-      private Set<String> extents;
 
       public Builder(String name){
          this.name = name;
@@ -78,12 +64,8 @@ public class JavaInterface extends NormalJavaDeclaration implements JavaDeclarat
          this.innerDeclarations = innerDeclarations;
          return this;
       }
-      public Builder extents(Set<String> extents){
-         this.extents = extents;
-         return this;
-      }
-      public JavaInterface build(){
-         return new JavaInterface(annotationModifiers, modifiers, name, innerDeclarations, extents){};
+      public JavaAnnotation build(){
+         return new JavaAnnotation(annotationModifiers, modifiers, name, innerDeclarations){};
       }
    }
 }

@@ -1,17 +1,21 @@
-package model.context.declaration;
+package model.declaration;
 
 import model.JavaAnnotationModifier;
 import model.JavaModifier;
-import model.context.JavaDeclaration;
 import resource.DeclarationType;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import static resource.Cons.*;
 
-public class JavaAnnotation extends NormalJavaDeclaration implements JavaDeclaration {
-   private JavaAnnotation(Set<JavaAnnotationModifier> annotationModifiers, Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations) {
+public class JavaClass extends NormalJavaDeclaration implements JavaDeclaration {
+   private String extend;
+   private Set<String> implementations;
+   private JavaClass(Set<JavaAnnotationModifier> annotationModifiers, Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations, String extend, Set<String> implementations) {
       super(annotationModifiers, modifiers, name, innerDeclarations);
+      this.extend = extend;
+      this.implementations = implementations;
    }
 
    @Override
@@ -27,7 +31,14 @@ public class JavaAnnotation extends NormalJavaDeclaration implements JavaDeclara
       if(getModifiers() != null && getModifiers().size()>0){
          for (Integer mod : getModifiers()) result.append(JavaModifier.getValue(mod)).append(SPACE);
       }
-      result.append(DeclarationType.ANNOTATION.toString()).append(SPACE).append(getName());
+      result.append(DeclarationType.CLASS.toString()).append(SPACE).append(getName());
+      if(!extend.equals("")) result.append(SPACE).append(EXTEND).append(SPACE).append(extend);
+      if(implementations != null && implementations.size() > 0) {
+         result.append(SPACE).append(IMPLEMENTS);
+         Iterator<String> iterator = implementations.iterator();
+         result.append(SPACE).append(iterator.next());
+         while (iterator.hasNext()) result.append(COMMA).append(SPACE).append(iterator.next());
+      }
       result.append(OPEN_BRACE);
 
       if(getInnerDeclarations() != null && getInnerDeclarations().size() > 0){
@@ -49,6 +60,8 @@ public class JavaAnnotation extends NormalJavaDeclaration implements JavaDeclara
       private Set<Integer> modifiers;
       private String name;
       private Set<JavaDeclaration> innerDeclarations;
+      private String extend;
+      private Set<String> implementations;
 
       public Builder(String name){
          this.name = name;
@@ -65,8 +78,24 @@ public class JavaAnnotation extends NormalJavaDeclaration implements JavaDeclara
          this.innerDeclarations = innerDeclarations;
          return this;
       }
-      public JavaAnnotation build(){
-         return new JavaAnnotation(annotationModifiers, modifiers, name, innerDeclarations){};
+      public Builder extend(String extend){
+         this.extend = extend;
+         return this;
       }
+      public Builder implementations(Set<String> implementations){
+         this.implementations = implementations;
+         return this;
+      }
+      public JavaClass build(){
+         return new JavaClass(annotationModifiers, modifiers, name, innerDeclarations, extend, implementations){};
+      }
+   }
+
+   public String getExtend() {
+      return extend;
+   }
+
+   public Set<String> getImplementations() {
+      return implementations;
    }
 }

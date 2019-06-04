@@ -92,12 +92,10 @@ public class JavaVariable {
 
       if (annotationModifiers != null && annotationModifiers.size()>0){
          for (JavaAnnotationModifier jam : annotationModifiers)
-            result.append(jam.toString());
-         result.append(SPACE);
+            result.append(jam.toString()).append(SPACE);
       }
       if (modifiers != null && modifiers.size()>0){
-         for (Integer i : modifiers) result.append(JavaModifier.getValue(i));
-         result.append(SPACE);
+         for (Integer i : modifiers) result.append(JavaModifier.getValue(i)).append(SPACE);
       }
       result.append(dataKind).append(SPACE).append(name);
       return result.toString();

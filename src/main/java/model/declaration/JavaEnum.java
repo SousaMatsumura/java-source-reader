@@ -1,8 +1,7 @@
-package model.context.declaration;
+package model.declaration;
 
 import model.JavaAnnotationModifier;
 import model.JavaModifier;
-import model.context.JavaDeclaration;
 import resource.DeclarationType;
 
 import java.util.Iterator;

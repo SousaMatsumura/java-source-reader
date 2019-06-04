@@ -1,6 +1,4 @@
-package model.context;
-
-import resource.Cons;
+package model.declaration;
 
 public interface JavaDeclaration{
    String toStringByDepth(final int depth);

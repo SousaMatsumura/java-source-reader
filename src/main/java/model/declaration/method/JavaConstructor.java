@@ -1,9 +1,9 @@
-package model.context.method;
+package model.declaration.method;
 
 import model.JavaAnnotationModifier;
 import model.JavaVariable;
 import model.JavaModifier;
-import model.context.JavaDeclaration;
+import model.declaration.JavaDeclaration;
 
 import java.util.Iterator;
 import java.util.Set;
