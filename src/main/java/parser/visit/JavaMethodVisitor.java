@@ -6,6 +6,8 @@ import model.JavaVariable;
 import model.declaration.JavaClass;
 import model.declaration.JavaDeclaration;
 import model.declaration.method.JavaMethod;
+import org.antlr.v4.misc.Graph;
+import org.antlr.v4.runtime.tree.ParseTree;
 import parser.Java8Parser;
 import resource.Cons;
 import resource.DeclarationType;
@@ -137,4 +139,6 @@ public class JavaMethodVisitor extends Java8BaseVisitor<JavaMethod> {
       }
       return result;
    }
+
+
 }
