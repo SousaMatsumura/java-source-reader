@@ -1,16 +1,11 @@
 package parser.visit;
 
-import model.JavaAnnotationModifier;
+import model.declaration.method.variable.JavaAnnotationModifier;
 import model.JavaModifier;
-import model.JavaVariable;
-import model.declaration.JavaClass;
+import model.declaration.method.variable.JavaVariable;
 import model.declaration.JavaDeclaration;
 import model.declaration.method.JavaMethod;
-import org.antlr.v4.misc.Graph;
-import org.antlr.v4.runtime.tree.ParseTree;
 import parser.Java8Parser;
-import resource.Cons;
-import resource.DeclarationType;
 
 import java.util.HashSet;
 import java.util.Set;

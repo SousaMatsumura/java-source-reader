@@ -1,4 +1,4 @@
-package model;
+package model.declaration.method.variable;
 
 import org.apache.commons.lang3.StringUtils;
 

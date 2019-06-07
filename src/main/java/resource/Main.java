@@ -1,11 +1,17 @@
 package resource;
 
+import hyperheuristics.FiniteValues;
 import model.JavaFile;
 import model.JavaProject;
 import model.declaration.JavaDeclaration;
+import model.declaration.method.JavaConstructor;
 import model.declaration.method.JavaMethod;
+import model.declaration.method.NormalJavaMethod;
+import model.declaration.method.variable.JavaVariable;
+import model.visit.JavaVisitorUtils;
 import resource.functional.ImplFunction;
 
+import java.util.HashSet;
 import java.util.Iterator;
 
 public class Main {
@@ -13,20 +19,28 @@ public class Main {
       //JavaProject project = new JavaProject("C:\\Users\\GabrieldeSousaMatsum\\Desktop\\projects\\br.inpe.autotest\\src\\test\\teste.java", ImplFunction.getGetJavaFiles());
       JavaProject project = new JavaProject("C:\\Users\\GabrieldeSousaMatsum\\Documents\\Java Projects\\FreeERPApp\\src\\main", ImplFunction.getGetJavaFiles());
       Iterator<JavaFile> itrJavaFille = project.getJavaFiles().iterator();
-      Iterator<JavaDeclaration> itrHighDeclaration = itrJavaFille.next().getDeclarations().iterator();
-      Iterator<JavaDeclaration> itrLowDeclaration;
-      System.out.println(itrHighDeclaration.next().toString());
-      /*do jd = itrHighDeclaration.next();
-      while(!(jd instanceof JavaMethod) && itrHighDeclaration.hasNext());
-      System.out.println(jd.toString());*/
+      while(itrJavaFille.hasNext()) {
+         Iterator<JavaDeclaration> itrHighDeclaration = itrJavaFille.next().getDeclarations().iterator();
 
-      /*JavaMethod jm = (JavaMethod) jd;
-      System.out.println(jm.toString());
-      jm.getParameters().iterator();*/
-      /*for(JavaFile jf : project.getJavaFiles()) {
-         for(JavaDeclaration jd : jf.getDeclarations()) {
-            if(jd instanceof JavaAnnotation) System.out.println(jd.toString());
+         JavaDeclaration temp = itrHighDeclaration.next();
+         if (itrHighDeclaration.hasNext()) temp = itrHighDeclaration.next();
+
+         //System.out.println(temp.toString());
+
+         System.out.println("--------------------------------");
+
+         HashSet<NormalJavaMethod> methods =
+               (HashSet<NormalJavaMethod>) JavaVisitorUtils.ALL_NORMAL_METHODS.visit().visit(temp);
+
+         for(NormalJavaMethod njm : methods){
+            System.out.println(njm.getMethodSignature());
+            for (JavaVariable jv : njm.getParameters()){
+               System.out.println(jv.toString()+": "+FiniteValues.getParameter(jv.getDataKind()));
+            }
          }
-      }*/
+
+      }
+      System.out.println(FiniteValues.BOOLEAN.Parameters());
+
    }
 }

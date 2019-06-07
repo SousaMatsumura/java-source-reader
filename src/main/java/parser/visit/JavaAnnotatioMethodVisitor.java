@@ -1,17 +1,12 @@
 package parser.visit;
 
-import model.JavaAnnotationModifier;
-import model.JavaModifier;
-import model.declaration.JavaClass;
-import model.declaration.JavaDeclaration;
+import model.declaration.method.variable.JavaAnnotationModifier;
 import model.declaration.method.JavaAnnotationMethod;
 import parser.Java8Parser;
-import resource.DeclarationType;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static resource.Cons.COMMA;
 import static resource.Cons.EMPTY;
 
 public class JavaAnnotatioMethodVisitor extends Java8BaseVisitor<JavaAnnotationMethod> {

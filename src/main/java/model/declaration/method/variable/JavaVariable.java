@@ -1,5 +1,6 @@
-package model;
+package model.declaration.method.variable;
 
+import model.JavaModifier;
 import resource.Cons;
 
 import java.util.Set;
@@ -100,5 +101,7 @@ public class JavaVariable {
       result.append(dataKind).append(SPACE).append(name);
       return result.toString();
    }
+
+
 
 }

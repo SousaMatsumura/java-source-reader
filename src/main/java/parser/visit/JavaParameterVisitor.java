@@ -1,10 +1,8 @@
 package parser.visit;
 
-import model.JavaAnnotationModifier;
+import model.declaration.method.variable.JavaAnnotationModifier;
 import model.JavaModifier;
-import model.JavaVariable;
-import model.declaration.JavaDeclaration;
-import model.declaration.method.JavaConstructor;
+import model.declaration.method.variable.JavaVariable;
 import parser.Java8Parser;
 
 import java.util.HashSet;

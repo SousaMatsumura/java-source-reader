@@ -1,10 +1,10 @@
 package model.declaration;
 
-import model.JavaAnnotationModifier;
+import model.declaration.method.variable.JavaAnnotationModifier;
 
 import java.util.Set;
 
-public abstract class NormalJavaDeclaration{
+public abstract class NormalJavaDeclaration implements JavaDeclaration{
    private Set<JavaAnnotationModifier> annotationModifiers;
    private Set<Integer> modifiers;
    private String name;

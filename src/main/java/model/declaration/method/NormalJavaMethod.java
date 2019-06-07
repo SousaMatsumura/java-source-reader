@@ -1,14 +1,14 @@
 package model.declaration.method;
 
-import model.JavaAnnotationModifier;
-import model.JavaVariable;
+import model.declaration.method.variable.JavaAnnotationModifier;
+import model.declaration.method.variable.JavaVariable;
 import model.declaration.JavaDeclaration;
 
 import java.util.Set;
 
 import static resource.Cons.*;
 
-public abstract class NormalJavaMethod{
+public abstract class NormalJavaMethod implements JavaDeclaration{
    private Set<Integer> modifiers;
    private Set<JavaAnnotationModifier> annotationModifiers;
    private String name;
@@ -39,14 +39,7 @@ public abstract class NormalJavaMethod{
       return getMethodSignature()!=null ? getMethodSignature().hashCode() : 1;
    }
 
-   private String getMethodSignature(){
-      if(name==null) return null;
-      final StringBuilder result = new StringBuilder(name);
-      result.append(OPEN_PARENTHESES);
-      if(parameters != null && parameters.size()>0)
-         for(JavaVariable p : parameters) result.append(p.getDataKind()).append(COMMA);
-      return result.deleteCharAt(result.length()-1).append(CLOSE_PARENTHESES).toString();
-   }
+   abstract public String getMethodSignature();
 
    public Set<Integer> getModifiers() {
       return modifiers;

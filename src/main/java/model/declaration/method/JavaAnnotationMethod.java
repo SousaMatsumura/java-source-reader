@@ -1,6 +1,6 @@
 package model.declaration.method;
 
-import model.JavaAnnotationModifier;
+import model.declaration.method.variable.JavaAnnotationModifier;
 import model.declaration.JavaDeclaration;
 
 import java.util.Set;

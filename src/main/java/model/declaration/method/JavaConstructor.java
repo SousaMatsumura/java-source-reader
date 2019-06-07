@@ -1,7 +1,7 @@
 package model.declaration.method;
 
-import model.JavaAnnotationModifier;
-import model.JavaVariable;
+import model.declaration.method.variable.JavaAnnotationModifier;
+import model.declaration.method.variable.JavaVariable;
 import model.JavaModifier;
 import model.declaration.JavaDeclaration;
 
@@ -15,6 +15,19 @@ public class JavaConstructor extends NormalJavaMethod implements JavaDeclaration
 
    private JavaConstructor(Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations, Set<JavaVariable> parameters, Set<String> exceptions, Set<JavaAnnotationModifier> annotationModifiers) {
       super(modifiers, name, innerDeclarations, parameters, exceptions, annotationModifiers);
+   }
+
+   @Override
+   public String getMethodSignature() {
+      if(getName()==null) return null;
+      final StringBuilder result = new StringBuilder(getName());
+      result.append(OPEN_PARENTHESES);
+      if(getParameters() != null && getParameters().size()>0) {
+         Iterator<JavaVariable> itr = getParameters().iterator();
+         result.append(itr.next().toString());
+         while (itr.hasNext()) result.append(COMMA).append(SPACE).append(itr.next().toString());
+      }
+      return result.append(CLOSE_PARENTHESES).toString();
    }
 
    @Override

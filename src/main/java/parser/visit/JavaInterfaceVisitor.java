@@ -1,6 +1,6 @@
 package parser.visit;
 
-import model.JavaAnnotationModifier;
+import model.declaration.method.variable.JavaAnnotationModifier;
 import model.JavaModifier;
 import model.declaration.JavaDeclaration;
 import model.declaration.JavaInterface;

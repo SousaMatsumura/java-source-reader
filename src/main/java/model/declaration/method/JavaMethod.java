@@ -1,8 +1,8 @@
 package model.declaration.method;
 
-import model.JavaAnnotationModifier;
+import model.declaration.method.variable.JavaAnnotationModifier;
 import model.JavaModifier;
-import model.JavaVariable;
+import model.declaration.method.variable.JavaVariable;
 import model.declaration.JavaDeclaration;
 
 import java.util.Iterator;
@@ -17,6 +17,19 @@ public class JavaMethod extends NormalJavaMethod implements JavaDeclaration {
    private JavaMethod(Set<Integer> modifiers, String name, Set<JavaDeclaration> innerDeclarations, Set<JavaVariable> parameters, Set<String> exceptions, String returns, Set<JavaAnnotationModifier> annotationModifiers) {
       super(modifiers, name, innerDeclarations, parameters, exceptions, annotationModifiers);
       this.returns = returns;
+   }
+
+   @Override
+   public String getMethodSignature() {
+      if(getName()==null) return null;
+      final StringBuilder result = new StringBuilder(returns);
+      result.append(SPACE).append(getName()).append(OPEN_PARENTHESES);
+      if(getParameters() != null && getParameters().size()>0) {
+         Iterator<JavaVariable> itr = getParameters().iterator();
+         result.append(itr.next().toString());
+         while (itr.hasNext()) result.append(COMMA).append(SPACE).append(itr.next().toString());
+      }
+      return result.append(CLOSE_PARENTHESES).toString();
    }
 
    @Override
@@ -95,8 +108,8 @@ public class JavaMethod extends NormalJavaMethod implements JavaDeclaration {
          this.exceptions = exceptions;
          return this;
       }
-      public Builder parameters(Set<JavaVariable> paraters){
-         this.parameters = paraters;
+      public Builder parameters(Set<JavaVariable> parameters){
+         this.parameters = parameters;
          return this;
       }
       public JavaMethod build(){
