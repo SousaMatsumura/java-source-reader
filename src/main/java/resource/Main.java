@@ -17,7 +17,7 @@ import java.util.Iterator;
 public class Main {
    public static void main(String[] args) {
       //JavaProject project = new JavaProject("C:\\Users\\GabrieldeSousaMatsum\\Desktop\\projects\\br.inpe.autotest\\src\\test\\teste.java", ImplFunction.getGetJavaFiles());
-      JavaProject project = new JavaProject("C:\\Users\\GabrieldeSousaMatsum\\Documents\\Java Projects\\FreeERPApp\\src\\main", ImplFunction.getGetJavaFiles());
+      JavaProject project = new JavaProject("C:\\Users\\Gabriel\\Documents\\case-studies\\src\\main\\java\\SWPDC_original\\src\\main\\java\\swpdc\\MainGerenciarDados.java", ImplFunction.getGetJavaFiles());
       Iterator<JavaFile> itrJavaFille = project.getJavaFiles().iterator();
       while(itrJavaFille.hasNext()) {
          Iterator<JavaDeclaration> itrHighDeclaration = itrJavaFille.next().getDeclarations().iterator();
@@ -31,11 +31,13 @@ public class Main {
 
          HashSet<NormalJavaMethod> methods =
                (HashSet<NormalJavaMethod>) JavaVisitorUtils.ALL_NORMAL_METHODS.visit().visit(temp);
-
          for(NormalJavaMethod njm : methods){
+            int i = 0;
             System.out.println(njm.getMethodSignature());
             for (JavaVariable jv : njm.getParameters()){
-               System.out.println(jv.toString()+": "+FiniteValues.getParameter(jv.getDataKind()));
+               System.out.println(i);
+               System.out.println("   "+jv.toString()+": "+FiniteValues.getParameter(jv.getDataKind()));
+               i++;
             }
          }
 

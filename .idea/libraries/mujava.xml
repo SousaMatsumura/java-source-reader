@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="mujava">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/mujava.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openjava.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
